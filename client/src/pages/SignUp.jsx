@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import OAuth from "../components/OAuth.jsx";
 
 const SignUp = () => {
   const [error, setError] = useState(null);
@@ -35,7 +36,6 @@ const SignUp = () => {
       setLoading(false);
       setError(null);
       navigate("/sign-in");
-    
     } catch (error) {
       setLoading(false);
       setError(error.message);
@@ -70,14 +70,17 @@ const SignUp = () => {
           required
           onChange={handleChange}
         />
-        <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-90 disabled:opacity-80">
+        <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-90 disabled:opacity-85">
           {loading ? "loading..." : "Sign Up"}
         </button>
+        <OAuth />
       </form>
       <div className="flex gap-2 mt-5">
         <p>Have an account?</p>
         <Link to={"/sign-in"}>
-        <span className="text-blue-700 hover:underline hover:opacity-75">Sign In</span>
+          <span className="text-blue-700 hover:underline hover:opacity-75">
+            Sign In
+          </span>
         </Link>
         {error && <p className="text-red-500">{error}</p>}
       </div>
