@@ -70,7 +70,9 @@ const Profile = () => {
 
         <p className="text-sm self-center">
           {fileUploadError ? (
-            <span className="text-red-700">Error Image upload (image must be less than 2 mb)</span>
+            <span className="text-red-700">
+              Error Image upload (image must be less than 2 mb)
+            </span>
           ) : filePerc > 0 && filePerc < 100 ? (
             <span className="text-slate-700">{`Uploading ${filePerc}%`}</span>
           ) : filePerc === 100 ? (
@@ -102,15 +104,15 @@ const Profile = () => {
         <button className="bg-slate-700 text-white p-3 uppercase rounded-lg hover:opacity-90">
           Update
         </button>
-        <div className="flex justify-between mt-4">
-          <span className="text-red-500 hover:text-red-700 cursor-pointer">
-            Delete an account
-          </span>
-          <span className="text-red-500 hover:text-red-700 cursor-pointer">
-            Sign Out
-          </span>
-        </div>
       </form>
+      <div className="flex justify-between mt-5">
+        <span className="text-red-500 hover:text-red-700 cursor-pointer">
+          Delete an account
+        </span>
+        <span className="text-red-500 hover:text-red-700 cursor-pointer">
+          Sign Out
+        </span>
+      </div>
     </div>
   );
 };
