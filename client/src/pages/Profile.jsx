@@ -16,6 +16,8 @@ const Profile = () => {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
 
+  console.log(formData);
+
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -48,6 +50,10 @@ const Profile = () => {
         );
       }
     );
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
   return (
@@ -86,6 +92,7 @@ const Profile = () => {
           placeholder="username"
           id="username"
           defaultValue={currentUser.username}
+          onChange={handleChange}
           className="border p-3 rounded-lg"
         />
         <input
@@ -93,11 +100,13 @@ const Profile = () => {
           placeholder="email"
           id="email"
           defaultValue={currentUser.email}
+          onChange={handleChange}
           className="border p-3 rounded-lg"
         />
         <input
           type="password"
           placeholder="Password"
+          onChange={handleChange}
           id="password"
           className="border p-3 rounded-lg"
         />
