@@ -6,7 +6,9 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+import { updateUserStart, updateUserSuccess, updateUserFailure } from "../redux/user/userSlice.js";
 import { app } from "../firebase";
+import { useDispatch } from "react-redux";
 
 const Profile = () => {
   const fileRef = useRef(null);
@@ -15,6 +17,9 @@ const Profile = () => {
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
+
+  const dispatch = useDispatch();
+
 
   console.log(formData);
 
@@ -52,14 +57,42 @@ const Profile = () => {
     );
   };
 
+  // this is used to handle the changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  // this is used to handle the task when user submit the form
+  const handleSubmit = async (e) => {
+    // this will help to not refresh the page
+    e.preventDefault();
+    try {
+      dispatch(updateUserStart());
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if(data.success === false) {
+        dispatch(updateUserFailure(data.message));
+        return;
+      }
+      dispatch(updateUserSuccess(data));
+      
+    } catch (error) {
+      dispatch(updateUserFailure(error.message));
+    }
   };
 
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
-      <form className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           onChange={(e) => setFile(e.target.files[0])}
           type="file"
