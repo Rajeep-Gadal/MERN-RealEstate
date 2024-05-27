@@ -6,7 +6,11 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { updateUserStart, updateUserSuccess, updateUserFailure } from "../redux/user/userSlice.js";
+import {
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+} from "../redux/user/userSlice.js";
 import { app } from "../firebase";
 import { useDispatch } from "react-redux";
 
@@ -17,9 +21,9 @@ const Profile = () => {
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
+  const [ updateSuccess, setUpdateSuccess ] = useState(false);
 
   const dispatch = useDispatch();
-
 
   console.log(formData);
 
@@ -78,12 +82,12 @@ const Profile = () => {
 
       const data = await res.json();
 
-      if(data.success === false) {
+      if (data.success === false) {
         dispatch(updateUserFailure(data.message));
         return;
       }
       dispatch(updateUserSuccess(data));
-      
+      setUpdateSuccess(true);
     } catch (error) {
       dispatch(updateUserFailure(error.message));
     }
@@ -143,10 +147,12 @@ const Profile = () => {
           id="password"
           className="border p-3 rounded-lg"
         />
-        <button className="bg-slate-700 text-white p-3 uppercase rounded-lg hover:opacity-90">
-          Update
+        <button disabled={loading} className="bg-slate-700 text-white p-3 uppercase rounded-lg hover:opacity-90">
+          {loading ? "Loading...." : "Update"}
         </button>
       </form>
+      <p className="text-red-700 mt-5">{error ? error : ""}</p>
+      <p className="text-green-700 mt-5">{updateSuccess ? "Profile updated successfully!" : ''}</p>
       <div className="flex justify-between mt-5">
         <span className="text-red-500 hover:text-red-700 cursor-pointer">
           Delete an account
