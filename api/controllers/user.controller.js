@@ -7,6 +7,7 @@ export const test = (req, res) => {
 };
 
 export const updateUser = async (req, res, next) => {
+    // this will control the user by giving that update functionallity after the verification from the user.router.js
     if (req.user.id !== req.params.id)
         return next(errorHandler(401, "You can only update your own account!"));
     try {
@@ -32,4 +33,18 @@ export const updateUser = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-}
+};
+
+export const deleteUser = async (req, res, next) => {      // this will control the user by giving that update functionallity after the verification from the user.router.js
+
+    if (req.user.id !== req.params.id)       // check if the user account is matches if not then this will retrun
+        return next(errorHandler(401, "You can only delete your own account!"));  // this error handler is the utils function used to create a custom error from the utils folder 
+    // if the user matches then the below code will run
+    try {
+        await User.findByIdAndDelete(req.params.id);
+        res.clearCookie("access_token");     // after deleting the account your cookies will be remain so to delete that we use this to clear the cookies
+        res.status(200).json("User has been deleted...");
+    } catch (error) {
+        next(error);     // it used middleware to handle the error or issues happens
+    }
+};

@@ -58,7 +58,7 @@ const SignIn = () => {
         />
         <input
           type="password"
-          placeholder="Create a Password"
+          placeholder="Enter your Password"
           className="border p-3 rounded-lg"
           id="password"
           required
