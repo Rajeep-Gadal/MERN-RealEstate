@@ -15,10 +15,11 @@ import {
   deleteUserFailure,
   signOutUserStart,
   signOutUserSuccess,
-  signOutUserFailure
+  signOutUserFailure,
 } from "../redux/user/userSlice.js";
 import { app } from "../firebase";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const fileRef = useRef(null);
@@ -123,7 +124,7 @@ const Profile = () => {
       dispatch(signOutUserStart());
       const res = await fetch(`/api/auth/signout`);
       const data = await res.json();
-      if(data.success === false) {
+      if (data.success === false) {
         dispatch(signOutUserFailure(data.message));
         return;
       }
@@ -131,7 +132,7 @@ const Profile = () => {
     } catch (error) {
       dispatch(signOutUserFailure(error.message));
     }
-  }
+  };
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -193,6 +194,7 @@ const Profile = () => {
         >
           {loading ? "Loading...." : "Update"}
         </button>
+        <Link className="bg-green-700 text-white p-3 rounded-lg text-center uppercase hover:opacity-90" to={"/create-listing"}>Create Listing</Link>
       </form>
       <p className="text-red-700 mt-5">{error ? error : ""}</p>
       <p className="text-green-700 mt-5">
@@ -205,7 +207,10 @@ const Profile = () => {
         >
           Delete an account
         </span>
-        <span onClick={handleSignOut} className="text-red-500 hover:text-red-700 cursor-pointer">
+        <span
+          onClick={handleSignOut}
+          className="text-red-500 hover:text-red-700 cursor-pointer"
+        >
           Sign Out
         </span>
       </div>
